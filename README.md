@@ -2,6 +2,23 @@
 
 An Express.js middleware for dynamic management of Model Context Protocol (MCP) tools via REST API.
 
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+- [API Reference](#api-reference)
+  - [Authentication](#authentication)
+  - [Endpoints](#endpoints)
+  - [Error Responses](#error-responses)
+- [Integration Examples](#integration-examples)
+  - [With Standard MCP Tools](#with-standard-mcp-tools)
+  - [With FlowMCP Schemas](#with-flowmcp-schemas)
+- [Security Considerations](#security-considerations)
+- [License](#license)
+- [Contributing](#contributing)
+
 ## Features
 
 - **Dynamic Tool Management**: Enable, disable, update, and remove MCP tools via REST API
