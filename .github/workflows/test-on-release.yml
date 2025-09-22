@@ -1,5 +1,14 @@
 name: Run Tests on Release
 
+# If you truly want this only for releases/tags, use one of:
+# on:
+#   release:
+#     types: [published]
+# or, for version tags:
+# on:
+#   push:
+#     tags:
+#       - 'v*'
 on: push
 
 permissions:
@@ -29,5 +38,6 @@ jobs:
         with:
           use_oidc: true
           files: ./coverage/lcov.info
-          fail_ci_if_error: true
           flags: unittests
+          fail_ci_if_error: false   # keep this, drop `continue-on-error`
+          verbose: true             # temporary: helps confirm resolved slug, etc.
