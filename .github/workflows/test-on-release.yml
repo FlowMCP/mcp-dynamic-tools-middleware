@@ -1,23 +1,25 @@
 name: Run Tests on Release
 
-# If you truly want this only for releases/tags, use one of:
+# Wenn du wirklich nur Releases bauen willst, ändere den Trigger (siehe Kommentar unten).
+on: push
+# Alternative Trigger:
 # on:
 #   release:
 #     types: [published]
-# or, for version tags:
+# oder für Tags:
 # on:
 #   push:
 #     tags:
 #       - 'v*'
-on: push
 
 permissions:
   contents: read
-  id-token: write
+  id-token: write   # nötig für OIDC
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,5 +41,20 @@ jobs:
           use_oidc: true
           files: ./coverage/lcov.info
           flags: unittests
-          fail_ci_if_error: false   # keep this, drop `continue-on-error`
-          verbose: true             # temporary: helps confirm resolved slug, etc.
+          fail_ci_if_error: false   # Build fällt nicht wegen Codecov aus
+          verbose: true             # fürs Debugging; später ggf. entfernen
+          slug: ${{ github.repository }}  # explizit: "owner/repo"
+          version: v11.2.2          # Workaround: stabile CLI-Version pinnen
+          # Falls du NICHT pinnen willst, lösche die Zeile oben und nutze optional:
+          # use_legacy_upload_endpoint: true
+        # Wichtig: KEIN "token:" und KEIN "git_service:" setzen!
+        # Achte auch darauf, dass in den Repo/Org/Environment-Variablen
+        # NICHT versehentlich CODECOV_TOKEN / CODECOV_SLUG / CODECOV_OWNER / CODECOV_REPO gesetzt sind.
+
+      # Optional: Coverage-Datei als Artefakt sichern, damit man sie im Zweifel inspizieren kann
+      - name: Upload lcov artifact (fallback)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov
+          path: coverage/lcov.info
